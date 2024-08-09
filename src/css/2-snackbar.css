@@ -15,7 +15,7 @@ form > label {
     border: 1px solid #808080;
     border-radius: 4px;
     max-width: 332px;
-    height: 40px;
+    max-height: 40px;
     padding: 8px 16px;
     margin-bottom: 16px;
     font-weight: 400;
