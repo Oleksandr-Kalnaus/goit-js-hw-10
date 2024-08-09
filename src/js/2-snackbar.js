@@ -9,21 +9,22 @@ form.addEventListener(`submit`, (event) => {
     const delay = parseInt(form.delay.value, 10);
     const state = form.state.value;
 
+    if (delay < 0) {
+        iziToast.error({
+            title: `Error`,
+            message: `Delay must be a positive number.`,
+            position: 'topRight',
+        });
+        return;
+    }
+
     createNotification(delay, state);
 });
 
 function createNotification(delay, state) {
     const notificationPromise = new Promise((resolve, reject) => {
         setTimeout(() => {
-                if (delay < 0) {
-                    iziToast.error({
-                        title: `Error`,
-                        message: `Delay must be a positive number.`,
-                        position: 'topRight',
-                    });
-                    return;
-    }
-            else if (state === 'fulfilled') {
+            if (state === 'fulfilled') {
                 resolve(`✅ Fulfilled promise in ${delay}ms`);
             } else {
                 reject(`❌ Rejected promise in ${delay}ms`);
