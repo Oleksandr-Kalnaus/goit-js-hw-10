@@ -5,43 +5,46 @@ import "flatpickr/dist/flatpickr.min.css";
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 
+const startButton = document.querySelector('button[data-start]');
+const timeInput = document.getElementById('datetime-picker');
+const timerDays = document.querySelector('span[data-days]');
+const timerHours = document.querySelector('span[data-hours]');
+const timerMins = document.querySelector('span[data-minutes]');
+const timerSec = document.querySelector('span[data-seconds]');
+
 let userSelectedDate;
 let timerId = null;
 let isTimerActive = false;
+startButton.disabled = true;
 
 const options = {
     enableTime: true,
     time_24hr: true,
     defaultDate: new Date(),
-  minuteIncrement: 1,
-  onOpen() {
-    if (isTimerActive) {
-      this.close();
-      }
-    },
+    minuteIncrement: 1,
     onClose(selectedDates) {
         userSelectedDate = selectedDates[0];
         if (userSelectedDate < new Date()) {
             iziToast.error({
                 title: 'Error',
-              message: 'Please choose a date in the future',
-              position: 'topRight'
+                message: 'Please choose a date in the future',
+                position: 'topRight'
             });
-            document.querySelector('button[data-start]').disabled = true;
+            startButton.disabled = true;
         } else {
-            document.querySelector('button[data-start]').disabled = false;
+            startButton.disabled = false;
         }
     },
 };
 
 flatpickr('#datetime-picker', options);
 
-document.querySelector('button[data-start]').addEventListener('click', startTimer);
+startButton.addEventListener('click', startTimer);
 
 function startTimer() {
   isTimerActive = true;
-  document.querySelector('button[data-start]').disabled = true;
-  document.getElementById('datetime-picker').disabled = true;
+  startButton.disabled = true;
+  timeInput.disabled = true;
 
   timerId = setInterval(() => {
     const currentTime = new Date();
@@ -50,8 +53,8 @@ function startTimer() {
     if (deltaTime <= 0) {
       clearInterval(timerId);
       updateTimerDisplay(0, 0, 0, 0);
-      document.querySelector('button[data-start]').disabled = false;
-      document.getElementById('datetime-picker').disabled = false;
+      startButton.disabled = true;
+      timeInput.disabled = false;
       isTimerActive = false;
       return;
     }
@@ -62,10 +65,10 @@ function startTimer() {
 }
 
 function updateTimerDisplay(days, hours, minutes, seconds) {
-  document.querySelector('span[data-days]').textContent = addLeadingZero(days);
-  document.querySelector('span[data-hours]').textContent = addLeadingZero(hours);
-  document.querySelector('span[data-minutes]').textContent = addLeadingZero(minutes);
-  document.querySelector('span[data-seconds]').textContent = addLeadingZero(seconds);
+  timerDays.textContent = addLeadingZero(days);
+  timerHours.textContent = addLeadingZero(hours);
+  timerMins.textContent = addLeadingZero(minutes);
+  timerSec.textContent = addLeadingZero(seconds);
 }
 
 function addLeadingZero(value) {
