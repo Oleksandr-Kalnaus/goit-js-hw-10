@@ -16,7 +16,7 @@ form.addEventListener(`submit`, (event) => {
             position: 'topRight',
         });
         return;
-    }
+    };
 
     createNotification(delay, state);
 });
@@ -25,25 +25,25 @@ function createNotification(delay, state) {
     const notificationPromise = new Promise((resolve, reject) => {
         setTimeout(() => {
             if (state === 'fulfilled') {
-                resolve(`✅ Fulfilled promise in ${delay}ms`);
+                resolve(delay);
             } else {
-                reject(`❌ Rejected promise in ${delay}ms`);
+                reject(delay);
             }
         }, delay);
     });
 
     notificationPromise
-        .then((message) => {
+        .then((delay) => {
             iziToast.success({
                 title: `OK`,
-                message: message,
+                message: `✅ Fulfilled promise in ${delay}ms`,
                 position: 'topRight',
             });
         })
-        .catch((message) => {
+        .catch((delay) => {
             iziToast.error({
                 title: `Not OK`,
-                message: message,
+                message: `❌ Rejected promise in ${delay}ms`,
                 position: 'topRight',
             });
         });
